@@ -1,5 +1,5 @@
 <?php
-require(__BASEPATH__ . '/app/qd/formbases/PrivateMessageEditFormBase.class.php');
+require(__BASEPATH__ . '/app/qd/formbases/PrivateMessageEditFormBase.php');
 
 /**
  * @author Ratno Putro Sulistiyono, ratno@knoqdown.com

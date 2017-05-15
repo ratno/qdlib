@@ -1,5 +1,5 @@
 <?php
-require(__BASEPATH__ . '/app/qd/meta_controls/base/PrivateMessageMetaControlBase.class.php');
+require(__BASEPATH__ . '/app/qd/meta_controls/base/PrivateMessageMetaControlBase.php');
 
 /**
  * /**

@@ -1,6 +1,6 @@
 <?php
 
-require(__BASEPATH__ . '/app/qd/models/base/TaskBase.class.php');
+require(__BASEPATH__ . '/app/qd/models/base/TaskBase.php');
 
 /**
  * @author Ratno Putro Sulistiyono, ratno@knoqdown.com

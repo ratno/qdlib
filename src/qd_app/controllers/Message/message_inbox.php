@@ -1,6 +1,6 @@
 <?php
 
-require(__BASEPATH__ . '/app/qd/formbases/PrivateMessageListFormBase.class.php');
+require(__BASEPATH__ . '/app/qd/formbases/PrivateMessageListFormBase.php');
 
 /**
  * @author Ratno Putro Sulistiyono, ratno@knoqdown.com

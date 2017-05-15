@@ -1,6 +1,6 @@
 <?php
 
-require(__BASEPATH__ . '/app/qd/formbases/UsersEditFormBase.class.php');
+require(__BASEPATH__ . '/app/qd/formbases/UsersEditFormBase.php');
 
 /**
  * @author Ratno Putro Sulistiyono, ratno@knoqdown.com

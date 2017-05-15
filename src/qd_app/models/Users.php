@@ -1,5 +1,5 @@
 <?php
-require(__BASEPATH__ . '/app/qd/models/base/UsersBase.class.php');
+require(__BASEPATH__ . '/app/qd/models/base/UsersBase.php');
 
 /**
  * @author Ratno Putro Sulistiyono, ratno@knoqdown.com
