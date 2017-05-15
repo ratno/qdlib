@@ -18,7 +18,7 @@ class QDLibServiceProvider extends ServiceProvider
             __DIR__ . '/config/qdlib.php' => config_path('qdlib.php'),
             __DIR__ . '/web/' => base_path('web'),
             __DIR__ . '/qd_app/' => base_path('app/qd'),
-        ]);
+        ],"qdlib");
 
         if ($this->app->runningInConsole()) {
             $this->commands([
