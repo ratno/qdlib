@@ -19,7 +19,7 @@ abstract class QApplication extends QApplicationBase
         // First use the QCubed Autoloader
         if (!parent::Autoload($strClassName)) {
             // TODO: Run any custom autoloading functionality (if any) here...
-            $filename = __BASEPATH__ . "/app/qd/models/$strClassName.class.php";
+            $filename = __BASEPATH__ . "/app/qd/models/$strClassName.php";
             if (file_exists($filename)) include_once($filename);
         }
     }
@@ -391,7 +391,7 @@ else {
 }
 
 // include related to models
-QApplicationBase::$ClassFile['qqn'] = __BASEPATH__ . '/app/qd/models/base/QQN.class.php';
+QApplicationBase::$ClassFile['qqn'] = __BASEPATH__ . '/app/qd/models/base/QQN.php';
 @include_once(__BASEPATH__ . '/app/qd/models/base/_class_paths.inc.php');
 @include_once(__BASEPATH__ . '/app/qd/models/base/_type_class_paths.inc.php');
 
