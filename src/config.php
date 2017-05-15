@@ -4,9 +4,10 @@
  * @company QD
  *
  */
+$basepath = substr(__DIR__,0,strpos(__DIR__,"/vendor/ratno"));
 
-if (file_exists(config_path("qdlib.php"))) {
-    $custom_config = include_once config_path("qdlib.php");
+if(file_exists($basepath."/config/qdlib.php")) {
+    $custom_config = include_once $basepath."/config/qdlib.php";
 } else {
     $custom_config = include_once __DIR__ . "/config/qdlib.php";
 }
