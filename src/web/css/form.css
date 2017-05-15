@@ -1,0 +1,81 @@
+form div.form_item {
+  clear: both;
+  overflow: hidden;
+  padding: 5px;
+  margin: 0 0 10px 0;
+}
+
+div.form_item * {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+div.form-name {
+  width: 25%;
+  float: left;
+  padding-right: 10px;
+}
+
+div.form-field {
+  width: 75%;
+  float: right;
+}
+
+input[type=text],
+input[type=email],
+input[type=url],
+input[type=password],
+input[type=file],
+select {
+  height: 2em;
+}
+
+input[type=text],
+input[type=email],
+input[type=url],
+input[type=password],
+textarea,
+select {
+  width: 75%;
+}
+
+@media (max-width: 600px) {
+  form div.form_item {
+    margin: 0 0 15px 0;
+  }
+
+  div.form-name {
+    width: 100%;
+    float: none;
+    margin: 0 0 5px 0;
+    border-bottom: 1px solid #8a9b0f;
+  }
+
+  div.form-field {
+    width: 100%;
+    float: none;
+  }
+
+  input[type=text],
+  input[type=email],
+  input[type=url],
+  input[type=password],
+  textarea,
+  select {
+    width: 100%;
+  }
+}
+
+@media (min-width: 600px) {
+  form div.form_item {
+    padding-bottom: 2px;
+    border-bottom: 1px solid #eee;
+  }
+}
+
+@media (min-width: 1200px) {
+  div.form-name {
+    text-align: right;
+  }
+}
