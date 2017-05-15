@@ -35,8 +35,8 @@
  *
  * Additionally, the following two constants MUST be defined
  * to the special needs of the actual server
- * define(__INFORMIX_TRANSLATION__, "/home/informix/lib/esql/igo4a304.so");
- * define(__INFORMIX_DRIVER__, "/home/informix/lib/cli/libifdmr.so");
+ * define(__INFORMIX_TRANSLATION__, "/home/informix/vendor/ratno/qdlib/src/esql/igo4a304.so");
+ * define(__INFORMIX_DRIVER__, "/home/informix/vendor/ratno/qdlib/src/cli/libifdmr.so");
  */
 /** BG
  *

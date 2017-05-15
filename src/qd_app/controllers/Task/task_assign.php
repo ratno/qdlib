@@ -239,7 +239,7 @@ protected $arrRoleChecked = array();
 
         $objRoles = Role::LoadAll();
         // browse controller directory
-        $controller_dir = __BASEPATH__ . "/apps/controllers";
+        $controller_dir = __BASEPATH__ . "/app/qd/controllers";
         $d = dir($controller_dir);
         while (false !== ($class_folder_name = $d->read())) {
             if ($class_folder_name != '.' && $class_folder_name != '..' && !preg_match('/^\./', $class_folder_name)) {

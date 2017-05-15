@@ -1,5 +1,5 @@
 <?php
-require(__BASEPATH__ . '/apps/models/base/WorkflowBase.class.php');
+require(__BASEPATH__ . '/app/qd/models/base/WorkflowBase.class.php');
 
 /**
  * @author Ratno Putro Sulistiyono, ratno@knoqdown.com

@@ -21,7 +21,7 @@ class HomeLogin extends QForm
     public static function exec()
     {
         try {
-            return HomeLogin::Run('HomeLogin', __BASEPATH__ . '/apps/views/Home/home_login.tpl.php');
+            return HomeLogin::Run('HomeLogin', __BASEPATH__ . '/app/qd/views/Home/home_login.tpl.php');
         } catch (Exception $e) {
             QForm::setFlashMessages("error|" . $e->getMessage());
             QApplication::Redirect(qd_url("Home", "login"));

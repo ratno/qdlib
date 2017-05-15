@@ -27,16 +27,16 @@ class QTranslationPoParser implements QTranslationBase
             if ($strCountryCode) {
                 $strCode = sprintf('%s_%s', $strLanguageCode, $strCountryCode);
                 $strLanguageFiles = array(
-                    __BASEPATH__ . "/lib/qcubed" . '/i18n/' . $strLanguageCode . '.po',
-                    __BASEPATH__ . "/lib/qcubed" . '/i18n/' . $strCode . '.po',
-                    __BASEPATH__ . "/lib/qcubed/i18n" . '/' . $strLanguageCode . '.po',
-                    __BASEPATH__ . "/lib/qcubed/i18n" . '/' . $strCode . '.po'
+                    __BASEPATH__ . "/vendor/ratno/qdlib/src/qcubed" . '/i18n/' . $strLanguageCode . '.po',
+                    __BASEPATH__ . "/vendor/ratno/qdlib/src/qcubed" . '/i18n/' . $strCode . '.po',
+                    __BASEPATH__ . "/vendor/ratno/qdlib/src/qcubed/i18n" . '/' . $strLanguageCode . '.po',
+                    __BASEPATH__ . "/vendor/ratno/qdlib/src/qcubed/i18n" . '/' . $strCode . '.po'
                 );
             } else {
                 $strCode = $strLanguageCode;
                 $strLanguageFiles = array(
-                    __BASEPATH__ . "/lib/qcubed" . '/i18n/' . $strLanguageCode . '.po',
-                    __BASEPATH__ . "/lib/qcubed/i18n" . '/' . $strLanguageCode . '.po'
+                    __BASEPATH__ . "/vendor/ratno/qdlib/src/qcubed" . '/i18n/' . $strLanguageCode . '.po',
+                    __BASEPATH__ . "/vendor/ratno/qdlib/src/qcubed/i18n" . '/' . $strLanguageCode . '.po'
                 );
             }
 

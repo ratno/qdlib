@@ -3,9 +3,9 @@
 //ini_set('session.use_only_cookies', 1);
 //ini_set('session.cookie_secure', 1);
 
-require_once(dirname(dirname(__FILE__)) . '/apps/config.php');
-include_once(__BASEPATH__ . '/lib/qcubed/framework/func.php');
-require_once(__BASEPATH__ . '/lib/qcubed/qcubed.inc.php');
+require_once(dirname(dirname(__FILE__)) . '/app/qd/config.php');
+include_once(__BASEPATH__ . '/vendor/ratno/qdlib/src/qcubed/framework/func.php');
+require_once(__BASEPATH__ . '/vendor/ratno/qdlib/src/qcubed/qcubed.inc.php');
 
 abstract class QApplication extends QApplicationBase
 {
@@ -20,7 +20,7 @@ abstract class QApplication extends QApplicationBase
         // First use the QCubed Autoloader
         if (!parent::Autoload($strClassName)) {
             // TODO: Run any custom autoloading functionality (if any) here...
-            $filename = __BASEPATH__ . "/apps/models/$strClassName.class.php";
+            $filename = __BASEPATH__ . "/app/qd/models/$strClassName.class.php";
             if (file_exists($filename)) include_once($filename);
         }
     }
@@ -164,13 +164,13 @@ abstract class QApplication extends QApplicationBase
 
     public static function GetFilename($classname, $taskname)
     {
-        $filename = __BASEPATH__ . "/apps/controllers/{$classname}/" . QConvertNotation::UnderscoreFromCamelCase($classname) . "_" . QConvertNotation::UnderscoreFromCamelCase($taskname) . ".php";
+        $filename = __BASEPATH__ . "/app/qd/controllers/{$classname}/" . QConvertNotation::UnderscoreFromCamelCase($classname) . "_" . QConvertNotation::UnderscoreFromCamelCase($taskname) . ".php";
         return $filename;
     }
 
     public static function GetFolder($classname)
     {
-        $folder = __BASEPATH__ . "/apps/controllers/{$classname}";
+        $folder = __BASEPATH__ . "/app/qd/controllers/{$classname}";
         return $folder;
     }
 
@@ -392,12 +392,12 @@ else {
 }
 
 // include related to models
-QApplicationBase::$ClassFile['qqn'] = __BASEPATH__ . '/apps/models/base/QQN.class.php';
-@include_once(__BASEPATH__ . '/apps/models/base/_class_paths.inc.php');
-@include_once(__BASEPATH__ . '/apps/models/base/_type_class_paths.inc.php');
+QApplicationBase::$ClassFile['qqn'] = __BASEPATH__ . '/app/qd/models/base/QQN.class.php';
+@include_once(__BASEPATH__ . '/app/qd/models/base/_class_paths.inc.php');
+@include_once(__BASEPATH__ . '/app/qd/models/base/_type_class_paths.inc.php');
 
 // include my enhancement
-@include_once(__BASEPATH__ . '/lib/qcubed/framework/ActivityAction.class.php');
+@include_once(__BASEPATH__ . '/vendor/ratno/qdlib/src/qcubed/framework/ActivityAction.class.php');
 
 // include excel reader 2
 @include_once(__BASEPATH__ . "/vendor/autoload.php");

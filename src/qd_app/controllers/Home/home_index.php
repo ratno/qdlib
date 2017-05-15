@@ -13,7 +13,7 @@ class HomeIndex extends QForm
     public static function exec()
     {
         try {
-            return HomeIndex::Run('HomeIndex', __BASEPATH__ . '/apps/views/Home/home_index.tpl.php');
+            return HomeIndex::Run('HomeIndex', __BASEPATH__ . '/app/qd/views/Home/home_index.tpl.php');
         } catch (Exception $objExc) {
             while (ob_get_level() > 0) {
                 ob_end_clean();

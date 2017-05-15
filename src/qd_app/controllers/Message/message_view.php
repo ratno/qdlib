@@ -1,5 +1,5 @@
 <?php
-require(__BASEPATH__ . '/apps/formbases/PrivateMessageViewFormBase.class.php');
+require(__BASEPATH__ . '/app/qd/formbases/PrivateMessageViewFormBase.class.php');
 
 /**
  * @author Ratno Putro Sulistiyono, ratno@knoqdown.com
@@ -17,7 +17,7 @@ class MessageView extends PrivateMessageViewFormBase
 
     public static function exec()
     {
-        return MessageView::Run('MessageView', __BASEPATH__ . '/apps/views/Message/message_view.tpl.php');
+        return MessageView::Run('MessageView', __BASEPATH__ . '/app/qd/views/Message/message_view.tpl.php');
     }
 
     protected function Form_Create()

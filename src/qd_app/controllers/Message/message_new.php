@@ -1,5 +1,5 @@
 <?php
-require(__BASEPATH__ . '/apps/formbases/PrivateMessageEditFormBase.class.php');
+require(__BASEPATH__ . '/app/qd/formbases/PrivateMessageEditFormBase.class.php');
 
 /**
  * @author Ratno Putro Sulistiyono, ratno@knoqdown.com
@@ -17,7 +17,7 @@ class MessageNew extends PrivateMessageEditFormBase
 
     public static function exec()
     {
-        return MessageNew::Run('MessageNew', __BASEPATH__ . '/apps/views/Message/message_new.tpl.php');
+        return MessageNew::Run('MessageNew', __BASEPATH__ . '/app/qd/views/Message/message_new.tpl.php');
     }
 
     public function btnSave_Click($strFormId, $strControlId, $strParameter)

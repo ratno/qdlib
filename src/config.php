@@ -116,7 +116,7 @@ define('__JQUERY_EFFECTS__', '');
 define('__JQUERY_CSS__', '');
 define('__QCUBED_JS_CORE__', '');
 
-define('__CACHE__', __BASEPATH__ . '/lib/qcubed/tmp/cache');
+define('__CACHE__', __BASEPATH__ . '/vendor/ratno/qdlib/src/qcubed/tmp/cache');
 
 //define('__FORM_STATE_HANDLER__', 'QSessionFormStateHandler');
 define('__FORM_STATE_HANDLER__', 'QFileFormStateHandler');
@@ -125,7 +125,7 @@ define('__DB_BACKED_FORM_STATE_HANDLER_DB_INDEX__', 1);
 // If using QDbBackedSessionHandler, specify the table name which would hold the formstates (must meet the requirements laid out above)
 define('__DB_BACKED_FORM_STATE_HANDLER_TABLE_NAME__', 'qc_formstate');
 // If using the QFileFormStateHandler, specify the path where QCubed will save the session state files (has to be writeable!)
-define('__FILE_FORM_STATE_HANDLER_PATH__', __BASEPATH__ . '/lib/qcubed/tmp'); //must be 777
+define('__FILE_FORM_STATE_HANDLER_PATH__', __BASEPATH__ . '/vendor/ratno/qdlib/src/qcubed/tmp'); //must be 777
 
 error_reporting(MY_ERROR_REPORTING);
 

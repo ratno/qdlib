@@ -1,6 +1,6 @@
 <?php
 
-require(__BASEPATH__ . '/apps/formbases/UsersEditFormBase.class.php');
+require(__BASEPATH__ . '/app/qd/formbases/UsersEditFormBase.class.php');
 
 /**
  * @author Ratno Putro Sulistiyono, ratno@knoqdown.com
@@ -25,7 +25,7 @@ class HomePreferences extends UsersEditFormBase
     public static function exec()
     {
         try {
-            return HomePreferences::Run('HomePreferences', __BASEPATH__ . '/apps/views/Home/home_preferences.tpl.php');
+            return HomePreferences::Run('HomePreferences', __BASEPATH__ . '/app/qd/views/Home/home_preferences.tpl.php');
         } catch (Exception $e) {
             QForm::setFlashMessages("error|" . $e->getMessage());
             QApplication::Redirect(qd_url("Home", "cpanel"));

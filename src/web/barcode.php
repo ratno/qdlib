@@ -3,13 +3,13 @@
 define('IN_CB', true);
 
 // Including all required classes
-require(dirname(dirname(__FILE__)) . '/lib/barcode/index.php');
-require(dirname(dirname(__FILE__)) . '/lib/barcode/FColor.php');
-require(dirname(dirname(__FILE__)) . '/lib/barcode/BarCode.php');
-require(dirname(dirname(__FILE__)) . '/lib/barcode/FDrawing.php');
+require(dirname(dirname(__FILE__)) . '/vendor/ratno/qdlib/src/barcode/index.php');
+require(dirname(dirname(__FILE__)) . '/vendor/ratno/qdlib/src/barcode/FColor.php');
+require(dirname(dirname(__FILE__)) . '/vendor/ratno/qdlib/src/barcode/BarCode.php');
+require(dirname(dirname(__FILE__)) . '/vendor/ratno/qdlib/src/barcode/FDrawing.php');
 
 // including the barcode technology
-require(dirname(dirname(__FILE__)) . '/lib/barcode/code39.barcode.php');
+require(dirname(dirname(__FILE__)) . '/vendor/ratno/qdlib/src/barcode/code39.barcode.php');
 
 // Creating some Color (arguments are R, G, B)
 $color_black = new FColor(0, 0, 0);

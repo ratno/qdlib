@@ -1,6 +1,6 @@
 <?php
 
-require(__BASEPATH__ . '/apps/formbases/PrivateMessageListFormBase.class.php');
+require(__BASEPATH__ . '/app/qd/formbases/PrivateMessageListFormBase.class.php');
 
 /**
  * @author Ratno Putro Sulistiyono, ratno@knoqdown.com
@@ -18,7 +18,7 @@ class MessageInbox extends PrivateMessageListFormBase
 
     public static function exec()
     {
-        return MessageInbox::Run('MessageInbox', __BASEPATH__ . '/apps/views/Message/message_list.tpl.php');
+        return MessageInbox::Run('MessageInbox', __BASEPATH__ . '/app/qd/views/Message/message_list.tpl.php');
     }
 
     public function colActionRender()

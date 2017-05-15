@@ -106,7 +106,7 @@ class QPage extends QBaseClass
     public static function Run($strClassName, $strAlternateHtmlFile = null)
     {
         $trace = debug_backtrace();
-        $tplFilename = str_replace(array('/apps/controllers/', '.php'), array('/apps/views/', '.tpl.php'), $trace[0]['file']);
+        $tplFilename = str_replace(array('/app/qd/controllers/', '.php'), array('/app/qd/views/', '.tpl.php'), $trace[0]['file']);
 
         $objClass = new $strClassName();
         $objClass->SetInformation($strClassName);
@@ -578,7 +578,7 @@ class QPage extends QBaseClass
                     $strFolder = explode("_", QConvertNotation::UnderscoreFromCamelCase($this->ClassName));
                     unset($strFolder[(count($strFolder) - 1)]);
                     $strFolder = QConvertNotation::CamelCaseFromUnderscore(implode("_", $strFolder));
-                    $strPath = __BASEPATH__ . "/apps/views/{$strFolder}/" . QConvertNotation::UnderscoreFromCamelCase($this->ClassName) . ".tpl.php";
+                    $strPath = __BASEPATH__ . "/app/qd/views/{$strFolder}/" . QConvertNotation::UnderscoreFromCamelCase($this->ClassName) . ".tpl.php";
                 } // Use passed-in value
                 else
                     $strPath = realpath($mixValue);

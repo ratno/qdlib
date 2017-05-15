@@ -1,6 +1,6 @@
 <?php
 
-require(__BASEPATH__ . '/apps/models/base/ActivityLogBase.class.php');
+require(__BASEPATH__ . '/app/qd/models/base/ActivityLogBase.class.php');
 
 /**
  * @author Ratno Putro Sulistiyono, ratno@knoqdown.com

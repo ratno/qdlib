@@ -13,7 +13,7 @@ class HomeCpanel extends QForm
     public static function exec()
     {
         try {
-            return HomeCpanel::Run('HomeCpanel', __BASEPATH__ . '/apps/views/Home/home_cpanel.tpl.php');
+            return HomeCpanel::Run('HomeCpanel', __BASEPATH__ . '/app/qd/views/Home/home_cpanel.tpl.php');
         } catch (Exception $objExc) {
             while (ob_get_level() > 0) {
                 ob_end_clean();

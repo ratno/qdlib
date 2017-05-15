@@ -64,7 +64,7 @@ class QApiDispatcher extends QBaseClass
 
                 $api = Api::QuerySingle(QQ::AndCondition(QQ::Equal(QQN::Api()->ClassName, $class), QQ::Equal(QQN::Api()->ActionName, $task)));
                 if ($api instanceof Api) {
-                    $filename = __BASEPATH__ . "/apps/apis/" . $api->ClassName . "/" . $api->Filename;
+                    $filename = __BASEPATH__ . "/app/qd/apis/" . $api->ClassName . "/" . $api->Filename;
                     if (file_exists($filename)) {
                         include($filename);
                         $strClassName = $api->ClassName . QString::ConvertToCamelCase($api->ActionName);
@@ -80,7 +80,7 @@ class QApiDispatcher extends QBaseClass
                         $this->arrOutput = array("status" => "error", "msg" => QError::ToString(QError::api_not_found), "error_code" => QError::api_not_found);
                     }
                 } else {
-                    $filename = __BASEPATH__ . "/apps/apis/$class/" . strtolower("{$class}_{$task}") . ".php";
+                    $filename = __BASEPATH__ . "/app/qd/apis/$class/" . strtolower("{$class}_{$task}") . ".php";
                     if (file_exists($filename) && (QAPI_LEVEL == 1 || QAPI_DEV)) {
                         include($filename);
                         $strClassName = $class . QString::ConvertToCamelCase($task);

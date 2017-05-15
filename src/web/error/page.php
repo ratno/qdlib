@@ -1,7 +1,7 @@
 <?php
 // Generate the Error Dump
 if (!ob_get_level()) ob_start();
-@include_once(__BASEPATH__ . '/lib/qcubed/framework/func.php');
+@include_once(__BASEPATH__ . '/vendor/ratno/qdlib/src/qcubed/framework/func.php');
 require(__WEB_PATH__ . '/error/dump.php');
 
 // Do We Log???

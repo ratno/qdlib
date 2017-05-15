@@ -44,7 +44,7 @@ function controller($strTableName, $strActionName, $strMethodName = null)
     $token = $strTableName . "_" . $strActionName;
     $filename = "$token.php";
     $class = QConvertNotation::CamelCaseFromUnderscore($token);
-    $filepath = __BASEPATH__ . "/apps/controllers/" . $folder . "/" . $filename;
+    $filepath = __BASEPATH__ . "/app/qd/controllers/" . $folder . "/" . $filename;
 
     include_once $filepath;
 
@@ -66,7 +66,7 @@ function controller($strTableName, $strActionName, $strMethodName = null)
         $strTopNavHtml = menu();
 
         if ($page->GlobalLayout) {
-            return include_once(__BASEPATH__ . "/apps/views/layout/{$page->GlobalLayout}.php");
+            return include_once(__BASEPATH__ . "/app/qd/views/layout/{$page->GlobalLayout}.php");
         } else {
             return $PageContent;
         }
