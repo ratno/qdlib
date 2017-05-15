@@ -13,7 +13,7 @@
         "psr-4": {
             "QD\\Lib\\": "src/"
         }
-    }
+    },
     "require": {
         "emanueleminotto/simple-html-dom": "^1.5",
         "tedivm/jshrink": "^1.1",
