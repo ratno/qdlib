@@ -326,6 +326,18 @@ abstract class QControlBase extends QBaseClass
     }
 
     /**
+     * Adds a control as a child of this control.
+     *
+     * @param QControl|QControlBase $objControl the control to add
+     */
+    public function AddChildControl(QControl $objControl)
+    {
+        $this->blnModified = true;
+        $this->objChildControlArray[$objControl->ControlId] = $objControl;
+        $objControl->objParentControl = $this;
+    }
+
+    /**
      * This function returns a persistent control which is supposed to be created only once for the user session
      * The way to call this function is shown in QCubed Examples. For brevity, here is how it is to be used:
      *
@@ -414,18 +426,6 @@ abstract class QControlBase extends QBaseClass
         $this->blnOnPage = null;
         $this->blnModified = null;
         $this->mixCausesValidation = null;
-    }
-
-    /**
-     * Adds a control as a child of this control.
-     *
-     * @param QControl|QControlBase $objControl the control to add
-     */
-    public function AddChildControl(QControl $objControl)
-    {
-        $this->blnModified = true;
-        $this->objChildControlArray[$objControl->ControlId] = $objControl;
-        $objControl->objParentControl = $this;
     }
 
     /**

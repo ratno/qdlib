@@ -1394,11 +1394,6 @@ class QQ
         return new QQExpandAsArray($objNode, $objSelect);
     }
 
-    static public function Select(/* array and/or parameterized list of QQNode objects */)
-    {
-        return new QQSelect(func_get_args());
-    }
-
     static public function LimitInfo($intMaxRowCount, $intOffset = 0)
     {
         return new QQLimitInfo($intMaxRowCount, $intOffset);
@@ -1435,9 +1430,15 @@ class QQ
         return null;
     }
 
+    static public function Select(/* array and/or parameterized list of QQNode objects */)
+    {
+        return new QQSelect(func_get_args());
+    }
+
     /////////////////////////
     // Aliased QQ Node
     /////////////////////////
+
     /**
      * Returns the supplied node object, after seting its alias to the value supplied
      *

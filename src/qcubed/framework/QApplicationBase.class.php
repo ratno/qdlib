@@ -30,7 +30,7 @@ abstract class QApplicationBase extends QBaseClass
      * @var string CacheControl
      */
     public static $CacheControl = 'private';
-/**
+    /**
      * @var #P#C\QCrossScripting.Purify|?
      * Defines the default mode for controls that need protection against
      * cross-site scripting. Can be overridden at the individual control level,
@@ -621,6 +621,18 @@ abstract class QApplicationBase extends QBaseClass
             return '';
     }
 
+    protected static function GenerateQueryStringHelper($strKey, $mixValue)
+    {
+        if (is_array($mixValue)) {
+            $strToReturn = null;
+            foreach ($mixValue as $strSubKey => $mixValue) {
+                $strToReturn .= QApplication::GenerateQueryStringHelper($strKey . '[' . $strSubKey . ']', $mixValue);
+            }
+            return $strToReturn;
+        } else
+            return '&' . $strKey . '=' . rawurlencode($mixValue);
+    }
+
     /**
      * By default, this is used by the codegen and form drafts to do a quick check
      * on the ALLOW_REMOTE_ADMIN constant (as defined in configuration.inc.php).  If enabled,
@@ -932,18 +944,6 @@ abstract class QApplicationBase extends QBaseClass
                 _p("</ul>", false);
             }
         _p('</ul></div>', false);
-    }
-
-    protected static function GenerateQueryStringHelper($strKey, $mixValue)
-    {
-        if (is_array($mixValue)) {
-            $strToReturn = null;
-            foreach ($mixValue as $strSubKey => $mixValue) {
-                $strToReturn .= QApplication::GenerateQueryStringHelper($strKey . '[' . $strSubKey . ']', $mixValue);
-            }
-            return $strToReturn;
-        } else
-            return '&' . $strKey . '=' . rawurlencode($mixValue);
     }
 
 }

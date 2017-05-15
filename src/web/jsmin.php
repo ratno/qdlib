@@ -1,4 +1,5 @@
 <?php
+
 /**
  * JSMin.php - modified PHP implementation of Douglas Crockford's JSMin.
  *
@@ -53,23 +54,31 @@
  * @license http://opensource.org/licenses/mit-license.php MIT License
  * @link http://code.google.com/p/jsmin-php/
  */
-
-class JSMin {
-    const ORD_LF            = 10;
-    const ORD_SPACE         = 32;
-    const ACTION_KEEP_A     = 1;
-    const ACTION_DELETE_A   = 2;
+class JSMin
+{
+    const ORD_LF = 10;
+    const ORD_SPACE = 32;
+    const ACTION_KEEP_A = 1;
+    const ACTION_DELETE_A = 2;
     const ACTION_DELETE_A_B = 3;
 
-    protected $a           = "\n";
-    protected $b           = '';
-    protected $input       = '';
-    protected $inputIndex  = 0;
+    protected $a = "\n";
+    protected $b = '';
+    protected $input = '';
+    protected $inputIndex = 0;
     protected $inputLength = 0;
-    protected $lookAhead   = null;
-    protected $output      = '';
-    protected $lastByteOut  = '';
+    protected $lookAhead = null;
+    protected $output = '';
+    protected $lastByteOut = '';
     protected $keptComment = '';
+
+    /**
+     * @param string $input
+     */
+    public function __construct($input)
+    {
+        $this->input = $input;
+    }
 
     /**
      * Minify Javascript.
@@ -82,14 +91,6 @@ class JSMin {
     {
         $jsmin = new JSMin($js);
         return $jsmin->min();
-    }
-
-    /**
-     * @param string $input
-     */
-    public function __construct($input)
-    {
-        $this->input = $input;
     }
 
     /**
@@ -118,10 +119,11 @@ class JSMin {
             $command = self::ACTION_KEEP_A; // default
             if ($this->a === ' ') {
                 if (($this->lastByteOut === '+' || $this->lastByteOut === '-')
-                        && ($this->b === $this->lastByteOut)) {
+                    && ($this->b === $this->lastByteOut)
+                ) {
                     // Don't delete this space. If we do, the addition/subtraction
                     // could be parsed as a post-increment
-                } elseif (! $this->isAlphaNum($this->b)) {
+                } elseif (!$this->isAlphaNum($this->b)) {
                     $command = self::ACTION_DELETE_A;
                 }
             } elseif ($this->a === "\n") {
@@ -131,14 +133,16 @@ class JSMin {
                     // in case of mbstring.func_overload & 2, must check for null b,
                     // otherwise mb_strpos will give WARNING
                 } elseif ($this->b === null
-                          || (false === strpos('{[(+-!~', $this->b)
-                              && ! $this->isAlphaNum($this->b))) {
+                    || (false === strpos('{[(+-!~', $this->b)
+                        && !$this->isAlphaNum($this->b))
+                ) {
                     $command = self::ACTION_DELETE_A;
                 }
-            } elseif (! $this->isAlphaNum($this->a)) {
+            } elseif (!$this->isAlphaNum($this->a)) {
                 if ($this->b === ' '
                     || ($this->b === "\n"
-                        && (false === strpos('}])+-"\'', $this->a)))) {
+                        && (false === strpos('}])+-"\'', $this->a)))
+                ) {
                     $command = self::ACTION_DELETE_A_B;
                 }
             }
@@ -165,7 +169,8 @@ class JSMin {
         // make sure we don't compress "a + ++b" to "a+++b", etc.
         if ($command === self::ACTION_DELETE_A_B
             && $this->b === ' '
-            && ($this->a === '+' || $this->a === '-')) {
+            && ($this->a === '+' || $this->a === '-')
+        ) {
             // Note: we're at an addition/substraction operator; the inputIndex
             // will certainly be a valid index
             if ($this->input[$this->inputIndex] === $this->a) {
@@ -186,12 +191,12 @@ class JSMin {
 
                 $this->lastByteOut = $this->a;
 
-                // fallthrough intentional
+            // fallthrough intentional
             case self::ACTION_DELETE_A: // 2
                 $this->a = $this->b;
                 if ($this->a === "'" || $this->a === '"') { // string literal
                     $str = $this->a; // in case needed for exception
-                    for(;;) {
+                    for (; ;) {
                         $this->output .= $this->a;
                         $this->lastByteOut = $this->a;
 
@@ -208,23 +213,23 @@ class JSMin {
                             $this->output .= $this->a;
                             $this->lastByteOut = $this->a;
 
-                            $this->a       = $this->get();
+                            $this->a = $this->get();
                             $str .= $this->a;
                         }
                     }
                 }
 
-                // fallthrough intentional
+            // fallthrough intentional
             case self::ACTION_DELETE_A_B: // 3
                 $this->b = $this->next();
                 if ($this->b === '/' && $this->isRegexpLiteral()) {
                     $this->output .= $this->a . $this->b;
                     $pattern = '/'; // keep entire pattern in case we need to report it in the exception
-                    for(;;) {
+                    for (; ;) {
                         $this->a = $this->get();
                         $pattern .= $this->a;
                         if ($this->a === '[') {
-                            for(;;) {
+                            for (; ;) {
                                 $this->output .= $this->a;
                                 $this->a = $this->get();
                                 $pattern .= $this->a;
@@ -239,7 +244,7 @@ class JSMin {
                                 if ($this->isEOF($this->a)) {
                                     throw new JSMin_UnterminatedRegExpException(
                                         "JSMin: Unterminated set in RegExp at byte "
-                                            . $this->inputIndex .": {$pattern}");
+                                        . $this->inputIndex . ": {$pattern}");
                                 }
                             }
                         }
@@ -261,35 +266,6 @@ class JSMin {
                 }
             // end case ACTION_DELETE_A_B
         }
-    }
-
-    /**
-     * @return bool
-     */
-    protected function isRegexpLiteral()
-    {
-        if (false !== strpos("(,=:[!&|?+-~*{;", $this->a)) {
-            // we obviously aren't dividing
-            return true;
-        }
-        if ($this->a === ' ' || $this->a === "\n") {
-            $length = strlen($this->output);
-            if ($length < 2) { // weird edge case
-                return true;
-            }
-            // you can't divide a keyword
-            if (preg_match('/(?:case|else|in|return|typeof)$/', $this->output, $m)) {
-                if ($this->output === $m[0]) { // odd but could happen
-                    return true;
-                }
-                // make sure it's a keyword, not end of an identifier
-                $charBeforeKeyword = substr($this->output, $length - strlen($m[0]) - 1, 1);
-                if (! $this->isAlphaNum($charBeforeKeyword)) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     /**
@@ -332,6 +308,29 @@ class JSMin {
     }
 
     /**
+     * Get the next character, skipping over comments. Some comments may be preserved.
+     *
+     * @return string
+     */
+    protected function next()
+    {
+        $get = $this->get();
+        if ($get === '/') {
+            switch ($this->peek()) {
+                case '/':
+                    $this->consumeSingleLineComment();
+                    $get = "\n";
+                    break;
+                case '*':
+                    $this->consumeMultipleLineComment();
+                    $get = ' ';
+                    break;
+            }
+        }
+        return $get;
+    }
+
+    /**
      * Get next char (without getting it). If is ctrl character, translate to a space or newline.
      *
      * @return string
@@ -340,18 +339,6 @@ class JSMin {
     {
         $this->lookAhead = $this->get();
         return $this->lookAhead;
-    }
-
-    /**
-     * Return true if the character is a letter, digit, underscore, dollar sign, or non-ASCII character.
-     *
-     * @param string $c
-     *
-     * @return bool
-     */
-    protected function isAlphaNum($c)
-    {
-        return (preg_match('/^[a-z0-9A-Z_\\$\\\\]$/', $c) || ord($c) > 126);
     }
 
     /**
@@ -382,7 +369,7 @@ class JSMin {
     {
         $this->get();
         $comment = '';
-        for(;;) {
+        for (; ;) {
             $get = $this->get();
             if ($get === '*') {
                 if ($this->peek() === '/') { // end of comment reached
@@ -409,29 +396,55 @@ class JSMin {
     }
 
     /**
-     * Get the next character, skipping over comments. Some comments may be preserved.
-     *
-     * @return string
+     * @return bool
      */
-    protected function next()
+    protected function isRegexpLiteral()
     {
-        $get = $this->get();
-        if ($get === '/') {
-            switch ($this->peek()) {
-                case '/':
-                    $this->consumeSingleLineComment();
-                    $get = "\n";
-                    break;
-                case '*':
-                    $this->consumeMultipleLineComment();
-                    $get = ' ';
-                    break;
+        if (false !== strpos("(,=:[!&|?+-~*{;", $this->a)) {
+            // we obviously aren't dividing
+            return true;
+        }
+        if ($this->a === ' ' || $this->a === "\n") {
+            $length = strlen($this->output);
+            if ($length < 2) { // weird edge case
+                return true;
+            }
+            // you can't divide a keyword
+            if (preg_match('/(?:case|else|in|return|typeof)$/', $this->output, $m)) {
+                if ($this->output === $m[0]) { // odd but could happen
+                    return true;
+                }
+                // make sure it's a keyword, not end of an identifier
+                $charBeforeKeyword = substr($this->output, $length - strlen($m[0]) - 1, 1);
+                if (!$this->isAlphaNum($charBeforeKeyword)) {
+                    return true;
+                }
             }
         }
-        return $get;
+        return false;
+    }
+
+    /**
+     * Return true if the character is a letter, digit, underscore, dollar sign, or non-ASCII character.
+     *
+     * @param string $c
+     *
+     * @return bool
+     */
+    protected function isAlphaNum($c)
+    {
+        return (preg_match('/^[a-z0-9A-Z_\\$\\\\]$/', $c) || ord($c) > 126);
     }
 }
 
-class JSMin_UnterminatedStringException extends Exception {}
-class JSMin_UnterminatedCommentException extends Exception {}
-class JSMin_UnterminatedRegExpException extends Exception {}
+class JSMin_UnterminatedStringException extends Exception
+{
+}
+
+class JSMin_UnterminatedCommentException extends Exception
+{
+}
+
+class JSMin_UnterminatedRegExpException extends Exception
+{
+}

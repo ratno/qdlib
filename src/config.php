@@ -5,10 +5,10 @@
  *
  */
 
-if(file_exists(config_path("qdlib.php"))) {
+if (file_exists(config_path("qdlib.php"))) {
     $custom_config = include_once config_path("qdlib.php");
 } else {
-    $custom_config = include_once __DIR__ ."/config/qdlib.php";
+    $custom_config = include_once __DIR__ . "/config/qdlib.php";
 }
 
 if (php_sapi_name() == 'cli' or PHP_SAPI == 'cli') {
@@ -17,7 +17,7 @@ if (php_sapi_name() == 'cli' or PHP_SAPI == 'cli') {
 } else {
     $__SERVER_ADDR = $_SERVER['SERVER_ADDR'];
     $__SERVER_NAME = $_SERVER['SERVER_NAME'];
-    subdomain('','');
+    subdomain('', '');
 }
 
 define('__GCM_API_KEY__', $custom_config['gcm_api_key']);
@@ -28,7 +28,7 @@ $hostname = ($__SERVER_NAME) ? $__SERVER_NAME : $_SERVER["HTTP_HOST"];
 
 $subdir = str_replace("\\", "/", substr(dirname(dirname(__FILE__)), strlen($_SERVER["DOCUMENT_ROOT"])));
 
-if(file_exists($_SERVER["DOCUMENT_ROOT"] . $subdir . "/web") && is_dir($_SERVER["DOCUMENT_ROOT"] . $subdir . "/web")) {
+if (file_exists($_SERVER["DOCUMENT_ROOT"] . $subdir . "/web") && is_dir($_SERVER["DOCUMENT_ROOT"] . $subdir . "/web")) {
     $docroot = $_SERVER["DOCUMENT_ROOT"];
     define('WEB_AS_DOCROOT', false);
 } else {
@@ -85,12 +85,12 @@ if (!defined('__SUBDIRECTORY__')) {
 
 // url
 define('__BASEURL__', __HOSTNAME__ . __VIRTUAL_DIRECTORY__ . __SUBDIRECTORY__);
-if(WEB_AS_DOCROOT) {
+if (WEB_AS_DOCROOT) {
     define('__WEB_URL__', __BASEURL__);
     define('__WEB_URL_WITHOUT_HOSTNAME__', __VIRTUAL_DIRECTORY__ . __SUBDIRECTORY__);
 } else {
     define('__WEB_URL__', __BASEURL__ . "/web");
-    define('__WEB_URL_WITHOUT_HOSTNAME__', __VIRTUAL_DIRECTORY__ . __SUBDIRECTORY__."/web");
+    define('__WEB_URL_WITHOUT_HOSTNAME__', __VIRTUAL_DIRECTORY__ . __SUBDIRECTORY__ . "/web");
 }
 define('__CSS_URL__', __WEB_URL__ . "/css");
 define('__JS_URL__', __WEB_URL__ . "/js");
@@ -150,11 +150,11 @@ define('__TOKEN__', $custom_config['token']);
 define('MAX_DB_CONNECTION_INDEX', 9);
 define("CACHE_PROVIDER_CLASS", null);
 define('CACHE_PROVIDER_OPTIONS', serialize(
-  array(
-    array('host' => '127.0.0.1', 'port' => 11211,),
-      //array('host' => '10.0.2.2', 'port' => 11211, ), // adds a second server
-  )
-)
+        array(
+            array('host' => '127.0.0.1', 'port' => 11211,),
+            //array('host' => '10.0.2.2', 'port' => 11211, ), // adds a second server
+        )
+    )
 );
 define("DB_BACKED_SESSION_HANDLER_DB_INDEX", 0);
 define("DB_BACKED_SESSION_HANDLER_TABLE_NAME", "qc_session");

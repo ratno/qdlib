@@ -19,23 +19,25 @@ function basepath($path = "")
     return base_path($path);
 }
 
-function load_bootstrap(){
+function load_bootstrap()
+{
     return include_once basepath("/web/bootstrap.php");
 }
 
-function subdomain($localdomain="",$publicdomain="") {
+function subdomain($localdomain = "", $publicdomain = "")
+{
     $subdomain = "";
-    if($localdomain || $publicdomain) {
+    if ($localdomain || $publicdomain) {
         $hostname = $_SERVER["HTTP_HOST"];
-        if(preg_match("/\.(".$localdomain."|".$publicdomain.")$/",$hostname)) {
-            $subdomain = preg_replace("/\.(".$localdomain."|".$publicdomain.")$/","",$hostname);
+        if (preg_match("/\.(" . $localdomain . "|" . $publicdomain . ")$/", $hostname)) {
+            $subdomain = preg_replace("/\.(" . $localdomain . "|" . $publicdomain . ")$/", "", $hostname);
         }
     }
 
-    define("SUBDOMAIN",$subdomain);
+    define("SUBDOMAIN", $subdomain);
 }
 
-function controller($strTableName, $strActionName, $strMethodName=null)
+function controller($strTableName, $strActionName, $strMethodName = null)
 {
     load_bootstrap();
     $folder = QConvertNotation::CamelCaseFromUnderscore($strTableName);
@@ -46,7 +48,7 @@ function controller($strTableName, $strActionName, $strMethodName=null)
 
     include_once $filepath;
 
-    if($strMethodName) {
+    if ($strMethodName) {
         $instance = new $class;
         $instance->SetInformation($class); // load all information needed suchas User
         $instance->Page_Create(); // default page create

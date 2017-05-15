@@ -64,90 +64,6 @@ class QRequest
         return QApplication::GetUser();
     }
 
-    public static function getUrl($key = null)
-    {
-        $objQRequest = new QR();
-
-        // Processing URL params
-        $strPathInfo = rawurldecode(QApplication::$PathInfo);
-
-        // Remove Starting '/'
-        if (QString::FirstCharacter($strPathInfo) == '/')
-            $strPathInfo = substr($strPathInfo, 1);
-
-        $strPathInfoArray = explode('/', $strPathInfo);
-        // set task
-        if (array_key_exists(0, $strPathInfoArray))
-            $objQRequest->arrData['strTaskName'] = $strPathInfoArray[0];
-        // set action
-        if (array_key_exists(1, $strPathInfoArray))
-            $objQRequest->arrData['strActionName'] = $strPathInfoArray[1];
-        // unset task and action
-        unset($strPathInfoArray[0], $strPathInfoArray[1]);
-
-        $i = 1;
-        // reiterate
-        foreach ($strPathInfoArray as $data) {
-            $arrTemp = explode(":", $data);
-            if (count($arrTemp) == 2) {
-                $objQRequest->arrData[$arrTemp[0]] = $arrTemp[1];
-            } else {
-                if ($data) {
-                    $objQRequest->arrData[$i] = $data;
-                    $i++;
-                }
-            }
-        }
-
-        return $objQRequest->toReturn($key);
-    }
-
-    public static function getGet($key = null)
-    {
-        $objQRequest = new QR(QR::GET);
-        return $objQRequest->toReturn($key);
-    }
-
-    public static function getPost($key = null)
-    {
-        $objQRequest = new QR(QR::POST);
-        return $objQRequest->toReturn($key);
-    }
-
-    public static function getSession($key = null, $subkey = null)
-    {
-        $objQRequest = new QR(QR::SESSION);
-        foreach ($_SESSION as $seskey => $sescont) {
-            if (preg_match('/^(qform)/', $seskey) || preg_match('/(ViewState)$/', $seskey)) {
-                continue;
-            } else {
-                $objQRequest->arrData[$seskey] = $sescont;
-            }
-        }
-        return $objQRequest->toReturn($key, $subkey);
-    }
-
-    public static function setSession($key, $value)
-    {
-        $_SESSION[$key] = $value;
-    }
-
-    public static function clearSession($key)
-    {
-        if (array_key_exists($key, $_SESSION)) {
-            unset($_SESSION[$key]);
-        }
-    }
-
-    public static function checkSession($key)
-    {
-        if (array_key_exists($key, $_SESSION)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public static function getViewState($key)
     {
         $strViewStateKey = __TOKEN__ . $key . "ViewState";
@@ -172,59 +88,26 @@ class QRequest
         QR::clearSession($strViewStateKey);
     }
 
+    public static function clearSession($key)
+    {
+        if (array_key_exists($key, $_SESSION)) {
+            unset($_SESSION[$key]);
+        }
+    }
+
     public static function checkViewState($key)
     {
         $strViewStateKey = __TOKEN__ . $key . "ViewState";
         return QR::checkSession($strViewStateKey);
     }
 
-    public static function getJson($key = null)
+    public static function checkSession($key)
     {
-        $objQRequest = new QR();
-        if (QRequest::isAjax() || QRequest::isPut() || QRequest::isJson()) {
-            $objQRequest->arrData = json_decode(file_get_contents("php://input"), true);
-        } elseif ($data = file_get_contents("php://input")) {
-            if (is_array($arrData = json_decode($data, true))) {
-                // masuk sini artinya data yang dikirim adalah json karena berhasil dibaca dan di decode
-                $objQRequest->arrData = $arrData;
-            } elseif (is_array($arrData = json_decode(html_entity_decode($data), true))) {
-                //  jika data di encode, maka di decode disini
-                $objQRequest->arrData = $arrData;
-            } elseif (is_array($arrData = json_decode(substr(html_entity_decode($data), 1), true))) {
-                //  jika data di encode dan tidak punya key untuk datanya, maka di decode disini dan dipotong karakter pertamanya yaitu =
-                $objQRequest->arrData = $arrData;
-            } elseif (is_array($arrData = json_decode(rawurldecode($data), true))) {
-                //  jika data di encode pake urlencode, maka di decode disini
-                $objQRequest->arrData = $arrData;
-            } elseif (is_array($arrData = json_decode(substr(rawurldecode($data), 1), true))) {
-                //  jika data di encode pake urlencode dan tidak punya key untuk datanya,
-                //  maka di decode disini dan dipotong karakter pertamanya yaitu =
-                $objQRequest->arrData = $arrData;
-            }
+        if (array_key_exists($key, $_SESSION)) {
+            return true;
+        } else {
+            return false;
         }
-
-        return $objQRequest->toReturn($key);
-    }
-
-    public static function isAjax()
-    {
-        return _env('HTTP_X_REQUESTED_WITH') === "XMLHttpRequest";
-    }
-
-    public static function isPut()
-    {
-        return (strtolower(_env('REQUEST_METHOD')) == 'put');
-    }
-
-    public static function isJson()
-    {
-        return (array_key_exists('CONTENT_TYPE', $_SERVER) && strtolower($_SERVER['CONTENT_TYPE']) == "application/json");
-    }
-
-    public static function getTokenize($key, $subkey = null)
-    {
-        $strTokenizedKey = __TOKEN__ . $key;
-        return QR::getSession($strTokenizedKey, $subkey);
     }
 
     public static function setTokenize($key, $value)
@@ -294,6 +177,24 @@ class QRequest
         }
     }
 
+    public static function getSession($key = null, $subkey = null)
+    {
+        $objQRequest = new QR(QR::SESSION);
+        foreach ($_SESSION as $seskey => $sescont) {
+            if (preg_match('/^(qform)/', $seskey) || preg_match('/(ViewState)$/', $seskey)) {
+                continue;
+            } else {
+                $objQRequest->arrData[$seskey] = $sescont;
+            }
+        }
+        return $objQRequest->toReturn($key, $subkey);
+    }
+
+    public static function setSession($key, $value)
+    {
+        $_SESSION[$key] = $value;
+    }
+
     public function toReturn($key, $subkey = null)
     {
         if (is_null($key)) {
@@ -321,6 +222,105 @@ class QRequest
         } else {
             return null;
         }
+    }
+
+    public static function getUrl($key = null)
+    {
+        $objQRequest = new QR();
+
+        // Processing URL params
+        $strPathInfo = rawurldecode(QApplication::$PathInfo);
+
+        // Remove Starting '/'
+        if (QString::FirstCharacter($strPathInfo) == '/')
+            $strPathInfo = substr($strPathInfo, 1);
+
+        $strPathInfoArray = explode('/', $strPathInfo);
+        // set task
+        if (array_key_exists(0, $strPathInfoArray))
+            $objQRequest->arrData['strTaskName'] = $strPathInfoArray[0];
+        // set action
+        if (array_key_exists(1, $strPathInfoArray))
+            $objQRequest->arrData['strActionName'] = $strPathInfoArray[1];
+        // unset task and action
+        unset($strPathInfoArray[0], $strPathInfoArray[1]);
+
+        $i = 1;
+        // reiterate
+        foreach ($strPathInfoArray as $data) {
+            $arrTemp = explode(":", $data);
+            if (count($arrTemp) == 2) {
+                $objQRequest->arrData[$arrTemp[0]] = $arrTemp[1];
+            } else {
+                if ($data) {
+                    $objQRequest->arrData[$i] = $data;
+                    $i++;
+                }
+            }
+        }
+
+        return $objQRequest->toReturn($key);
+    }
+
+    public static function getGet($key = null)
+    {
+        $objQRequest = new QR(QR::GET);
+        return $objQRequest->toReturn($key);
+    }
+
+    public static function getPost($key = null)
+    {
+        $objQRequest = new QR(QR::POST);
+        return $objQRequest->toReturn($key);
+    }
+
+    public static function getJson($key = null)
+    {
+        $objQRequest = new QR();
+        if (QRequest::isAjax() || QRequest::isPut() || QRequest::isJson()) {
+            $objQRequest->arrData = json_decode(file_get_contents("php://input"), true);
+        } elseif ($data = file_get_contents("php://input")) {
+            if (is_array($arrData = json_decode($data, true))) {
+                // masuk sini artinya data yang dikirim adalah json karena berhasil dibaca dan di decode
+                $objQRequest->arrData = $arrData;
+            } elseif (is_array($arrData = json_decode(html_entity_decode($data), true))) {
+                //  jika data di encode, maka di decode disini
+                $objQRequest->arrData = $arrData;
+            } elseif (is_array($arrData = json_decode(substr(html_entity_decode($data), 1), true))) {
+                //  jika data di encode dan tidak punya key untuk datanya, maka di decode disini dan dipotong karakter pertamanya yaitu =
+                $objQRequest->arrData = $arrData;
+            } elseif (is_array($arrData = json_decode(rawurldecode($data), true))) {
+                //  jika data di encode pake urlencode, maka di decode disini
+                $objQRequest->arrData = $arrData;
+            } elseif (is_array($arrData = json_decode(substr(rawurldecode($data), 1), true))) {
+                //  jika data di encode pake urlencode dan tidak punya key untuk datanya,
+                //  maka di decode disini dan dipotong karakter pertamanya yaitu =
+                $objQRequest->arrData = $arrData;
+            }
+        }
+
+        return $objQRequest->toReturn($key);
+    }
+
+    public static function isAjax()
+    {
+        return _env('HTTP_X_REQUESTED_WITH') === "XMLHttpRequest";
+    }
+
+    public static function isPut()
+    {
+        return (strtolower(_env('REQUEST_METHOD')) == 'put');
+    }
+
+    public static function isJson()
+    {
+        return (array_key_exists('CONTENT_TYPE', $_SERVER) && strtolower($_SERVER['CONTENT_TYPE']) == "application/json");
+    }
+
+    public static function getTokenize($key, $subkey = null)
+    {
+        $strTokenizedKey = __TOKEN__ . $key;
+        return QR::getSession($strTokenizedKey, $subkey);
     }
 }
 
