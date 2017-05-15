@@ -2,7 +2,6 @@
 
 function qd($key = null, $value = null)
 {
-//    $app = \QD\Application::getInstance();
     $app = app();
     if ($key) {
         if ($value) {
@@ -97,7 +96,7 @@ function prepare_routes()
 {
     $role_name = strtolower(role());
 
-    $route_filename = basepath("apps/routes/{$role_name}_generated.php");
+    $route_filename = basepath("app/qd/routes/{$role_name}_generated.php");
 
     if (!file_exists($route_filename)) {
         generate_routes();
@@ -130,8 +129,12 @@ function write_routes($objRole, $objTaskArray)
         $role_name = $objRole;
     }
     $role_name = strtolower($role_name);
-    $route_filename = basepath("apps/routes/{$role_name}_generated.php");
-    $route_filename_manual = basepath("apps/routes/{$role_name}.php");
+
+    $folder = basepath('app/qd/routes');
+    if(!file_exists($folder)) mkdir($folder);
+
+    $route_filename = $folder . "/{$role_name}_generated.php";
+    $route_filename_manual = $folder . "/{$role_name}.php";
 
     $out = '<?php /* do not edit this route, because it will be override from database */' . "\n";
     if ($objTaskArray) {
@@ -140,9 +143,9 @@ function write_routes($objRole, $objTaskArray)
 
             if (!$objTask->IsIndependent) {
                 $url .= "/{hashid}";
-                $out .= 'qd()->match("' . $url . '", function ($hashid) { return controller("' . $objTask->TableName . '","' . $objTask->ActionName . '"); });' . "\n";
+                $out .= 'Route::any("' . $url . '", function ($hashid) { return controller("' . $objTask->TableName . '","' . $objTask->ActionName . '"); });' . "\n";
             } else {
-                $out .= 'qd()->match("' . $url . '", function () { return controller("' . $objTask->TableName . '","' . $objTask->ActionName . '"); });' . "\n";
+                $out .= 'Route::any("' . $url . '", function () { return controller("' . $objTask->TableName . '","' . $objTask->ActionName . '"); });' . "\n";
             }
         }
     }
@@ -163,7 +166,7 @@ function prepare_privileges()
 {
     $role_name = strtolower(role());
 
-    $privileges_filename = basepath("apps/privileges/{$role_name}.php");
+    $privileges_filename = basepath("app/qd/privileges/{$role_name}.php");
 
     if (!file_exists($privileges_filename)) {
         generate_privileges();
@@ -198,7 +201,11 @@ function write_privilege($objRole, $objTaskArray)
         $role_id = 0;
     }
     $role_name = strtolower($role_name);
-    $privileges_filename = basepath("apps/privileges/{$role_name}.php");
+
+    $folder = basepath('app/qd/privileges');
+    if(!file_exists($folder)) mkdir($folder);
+
+    $privileges_filename = $folder . "/{$role_name}.php";
 
     $old_privileges = old_privileges($role_id);
 
@@ -237,13 +244,13 @@ function load_routes()
 {
     $role_name = strtolower(role());
 
-    $filename_generated = basepath("apps/routes/{$role_name}_generated.php");
-    $filename_manual = basepath("apps/routes/$role_name.php");
+    $filename_generated = basepath("app/qd/routes/{$role_name}_generated.php");
+    $filename_manual = basepath("app/qd/routes/$role_name.php");
     if (file_exists($filename_generated)) {
         require_once $filename_manual;
         require_once $filename_generated;
     } else {
-        require_once basepath("apps/routes/_default.php");
+        require_once basepath("app/qd/routes/_default.php");
     }
 }
 
@@ -252,7 +259,7 @@ function check_privileges($key)
 
     $role_name = strtolower(role());
 
-    $filename = basepath("apps/privileges/$role_name.php");
+    $filename = basepath("app/qd/privileges/$role_name.php");
     if (file_exists($filename)) {
         $privs = require $filename;
 
@@ -273,7 +280,7 @@ function get_privileges($bysearch = 'bymodel', $key = null)
 {
     $role_name = strtolower(role());
 
-    $filename = basepath("apps/privileges/$role_name.php");
+    $filename = basepath("app/qd/privileges/$role_name.php");
     if (file_exists($filename)) {
         $privs = require $filename;
 
@@ -294,6 +301,7 @@ function old_privileges($intRoleId = 0)
 {
     load_bootstrap();
     if ($intRoleId) {
+        $blnLoggedIn = TRUE;
         $cond_menugroup = QQ::AndCondition(
             QQ::OrCondition(QQ::Equal(QQN::MenuGroup()->Role->RoleId, $intRoleId)),
             QQ::OrCondition(QQ::IsNull(QQN::MenuGroup()->ParentMenuId), QQ::Equal(QQN::MenuGroup()->ParentMenuId, 0))

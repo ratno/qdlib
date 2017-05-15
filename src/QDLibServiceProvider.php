@@ -3,6 +3,7 @@
 namespace QD\Lib;
 
 use Illuminate\Support\ServiceProvider;
+use QD\Lib\Commands\Route;
 
 class QDLibServiceProvider extends ServiceProvider
 {
@@ -18,6 +19,12 @@ class QDLibServiceProvider extends ServiceProvider
             __DIR__ . '/web/' => base_path('web'),
             __DIR__ . '/qd_app/' => base_path('app/qd'),
         ]);
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                Route::class,
+            ]);
+        }
     }
 
     /**
