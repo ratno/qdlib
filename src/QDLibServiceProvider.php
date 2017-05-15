@@ -25,6 +25,18 @@ class QDLibServiceProvider extends ServiceProvider
                 Route::class,
             ]);
         }
+
+        if(($user = user()) instanceof Users) {
+            $role = strtolower($user->Role->Name);
+        } else {
+            $role = "public";
+        }
+
+        $route_override = "app/qd/routes/{$role}.php";
+        $route_generated = "app/qd/routes/{$role}_generated.php";
+
+        $this->loadRoutesFrom(base_path($route_override));
+        $this->loadRoutesFrom(base_path($route_generated));
     }
 
     /**
