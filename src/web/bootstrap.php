@@ -3,7 +3,6 @@
 //ini_set('session.use_only_cookies', 1);
 //ini_set('session.cookie_secure', 1);
 
-require_once(dirname(dirname(__FILE__)) . '/app/qd/config.php');
 include_once(__BASEPATH__ . '/vendor/ratno/qdlib/src/qcubed/framework/func.php');
 require_once(__BASEPATH__ . '/vendor/ratno/qdlib/src/qcubed/qcubed.inc.php');
 
