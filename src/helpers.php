@@ -24,19 +24,6 @@ function load_bootstrap()
     return include_once basepath("/web/bootstrap.php");
 }
 
-function subdomain($localdomain = "", $publicdomain = "")
-{
-    $subdomain = "";
-    if ($localdomain || $publicdomain) {
-        $hostname = $_SERVER["HTTP_HOST"];
-        if (preg_match("/\.(" . $localdomain . "|" . $publicdomain . ")$/", $hostname)) {
-            $subdomain = preg_replace("/\.(" . $localdomain . "|" . $publicdomain . ")$/", "", $hostname);
-        }
-    }
-
-    define("SUBDOMAIN", $subdomain);
-}
-
 function controller($strTableName, $strActionName, $strMethodName = null)
 {
     load_bootstrap();

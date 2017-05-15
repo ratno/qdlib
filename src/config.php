@@ -12,6 +12,19 @@ if(file_exists($basepath."/config/qdlib.php")) {
     $custom_config = include_once __DIR__ . "/config/qdlib.php";
 }
 
+function subdomain($localdomain = "", $publicdomain = "")
+{
+    $subdomain = "";
+    if ($localdomain || $publicdomain) {
+        $hostname = $_SERVER["HTTP_HOST"];
+        if (preg_match("/\.(" . $localdomain . "|" . $publicdomain . ")$/", $hostname)) {
+            $subdomain = preg_replace("/\.(" . $localdomain . "|" . $publicdomain . ")$/", "", $hostname);
+        }
+    }
+
+    define("SUBDOMAIN", $subdomain);
+}
+
 if (php_sapi_name() == 'cli' or PHP_SAPI == 'cli') {
     $__SERVER_ADDR = gethostbyname(gethostname());
     $__SERVER_NAME = php_uname("n");
