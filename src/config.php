@@ -40,7 +40,7 @@ define('__GCM_SENDER_ID__', $custom_config['gcm_sender_id']); // use only on and
 
 $hostname = ($__SERVER_NAME) ? $__SERVER_NAME : $_SERVER["HTTP_HOST"];
 
-$subdir = str_replace("\\", "/", substr(dirname(dirname(__FILE__)), strlen($_SERVER["DOCUMENT_ROOT"])));
+$subdir = str_replace("\\", "/", substr($basepath, strlen($_SERVER["DOCUMENT_ROOT"])));
 
 if (file_exists($_SERVER["DOCUMENT_ROOT"] . $subdir . "/web") && is_dir($_SERVER["DOCUMENT_ROOT"] . $subdir . "/web")) {
     $docroot = $_SERVER["DOCUMENT_ROOT"];
@@ -94,7 +94,7 @@ define('__ENABLE_NOTIFICATION__', false);
 
 // path
 if (!defined('__SUBDIRECTORY__')) {
-    define('__SUBDIRECTORY__', str_replace("\\", "/", substr(dirname(dirname(__FILE__)), strlen(__DOCROOT__))));
+    define('__SUBDIRECTORY__', $subdir);
 }
 
 // url
@@ -112,7 +112,7 @@ define('__IMAGES_URL__', __WEB_URL__ . "/images");
 define('__OTHERS_URL__', __WEB_URL__ . "/others");
 
 // path
-define('__BASEPATH__', __DOCROOT__ . __SUBDIRECTORY__);
+define('__BASEPATH__', $basepath);
 define('__WEB_PATH__', __BASEPATH__ . "/web");
 define('__CSS_PATH__', __WEB_PATH__ . "/css");
 define('__JS_PATH__', __WEB_PATH__ . "/js");
