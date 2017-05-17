@@ -1,4 +1,7 @@
 <?php
+$dotenv = new \Dotenv\Dotenv(dirname(__DIR__));
+$dotenv->load();
+
 return [
     "gcm_api_key" => 'AIzaSyAt5AcLNewvci9lT27Yh6idJL_WCmNRLv8',
     "gcm_url" => 'https://android.googleapis.com/gcm/send',
