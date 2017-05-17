@@ -25,7 +25,7 @@ class QDLibServiceProvider extends ServiceProvider
                 Route::class,
             ]);
         } else {
-            if(($user = user()) instanceof Users) {
+            if(($user = user()) instanceof \Users) {
                 $role = strtolower($user->Role->Name);
             } else {
                 $role = "public";
