@@ -268,7 +268,9 @@ abstract class QDatabaseBase extends QBaseClass
         // Check for DATE Value
         if ($mixData instanceof QDateTime) {
             /** @var QDateTime $mixData */
-            if ($mixData->IsTimeNull())
+            if($mixData->IsDateNull() && $mixData->IsTimeNull())
+                return $strToReturn . 'NULL';
+            elseif ($mixData->IsTimeNull())
                 return $strToReturn . sprintf("'%s'", $mixData->qFormat('YYYY-MM-DD'));
             else
                 return $strToReturn . sprintf("'%s'", $mixData->qFormat(QDateTime::FormatIso));
