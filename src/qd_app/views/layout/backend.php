@@ -74,7 +74,7 @@
                         <li class="divider-vertical hidden-phone hidden-tablet"></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <img src="<?php echo $ProfpicFile ?>" height="24"/> <?php echo $page->User->Name; ?>
+                                <img src="<?php echo __OTHERS_URL__ . $page->User->ProfilePictureFile ?>" height="24"/> <?php echo $page->User->Name; ?>
                                 <?php if (QApplication::CheckTask("home", "myaccount") || QApplication::CheckTask("home", "preferences")) : ?>
                                     <b class="caret"></b>
                                 <?php endif; ?>
