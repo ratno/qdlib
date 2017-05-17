@@ -62,7 +62,13 @@ class QDateTime extends DateTime
             } else {
                 if ($strInputFormat) {
                     $date = date_create_from_format($strInputFormat, $mixValue);
-                    parent::__construct($date->format(DateTime::ISO8601));
+                    if($date instanceof DateTime) {
+                        parent::__construct($date->format(DateTime::ISO8601));
+                    } else {
+                        parent::__construct();
+                        $this->blnTimeNull = true;
+                        $this->blnDateNull = true;
+                    }
                 } else {
                     parent::__construct($mixValue);
                 }
