@@ -405,6 +405,11 @@ function menu()
     }
     $arrCurrentRequestUri = explode("/", $strCurrentRequestUri);
 
+    $classfoldername_request = str_replace("-", "_", $strCurrentRequestUri[0]);
+    $classfoldername = QConvertNotation::CamelCaseFromUnderscore($classfoldername_request);
+    $classtaskname_request = str_replace("-", "_", $strCurrentRequestUri[1]);
+    $classtaskname = QConvertNotation::CamelCaseFromUnderscore($classtaskname_request);
+
     $arrCurrentRequestUriCombination = array();
     for ($i = count($arrCurrentRequestUri) - 1; $i > 0; $i--) {
         $arrCurrentRequestUriCombination[] = strtolower(implode("/", $arrCurrentRequestUri));
