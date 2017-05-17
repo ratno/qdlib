@@ -71,6 +71,18 @@ if(!class_exists(QType::class)) {
         const ArrayType = 'array';
         const DateTime = 'QDateTime';
         const Resource = 'resource';
+
+        const STRING = 'string';
+        const INTEGER = 'integer';
+        const FLOAT = 'double';
+        const BOOLEAN = 'boolean';
+        const OBJECT = 'object';
+        const ARRAY_TYPE = 'array';
+        const DATE_TIME = 'QDateTime';
+        const RESOURCE = 'resource';
+        const CALLABLE_TYPE = 'callable'; // Callable Type  - Note: For QCubed, Type::CALLABLE_TYPEs CANNOT be Closures (because they cannot be serialized into the form state)
+        const ASSOCIATION = 'association';
+
         const NoOp = 1;
         const CheckOnly = 2;
         const CastOnly = 3;
@@ -121,20 +133,28 @@ if(!class_exists(QType::class)) {
         {
             switch ($strType) {
                 case QType::Object:
+                case QType::OBJECT:
                     return 'QType::Object';
                 case QType::String:
+                case QType::STRING:
                     return 'QType::String';
                 case QType::Integer:
+                case QType::INTEGER:
                     return 'QType::Integer';
                 case QType::Float:
+                case QType::FLOAT:
                     return 'QType::Float';
                 case QType::Boolean:
+                case QType::BOOLEAN:
                     return 'QType::Boolean';
                 case QType::ArrayType:
+                case QType::ARRAY_TYPE:
                     return 'QType::ArrayType';
                 case QType::Resource:
+                case QType::RESOURCE:
                     return 'QType::Resource';
                 case QType::DateTime:
+                case QType::DATE_TIME:
                     return 'QType::DateTime';
 
                 default:
@@ -180,8 +200,10 @@ if(!class_exists(QType::class)) {
                 if ($objReflection->getName() == 'SimpleXMLElement') {
                     switch ($strType) {
                         case QType::String:
+                        case QType::STRING:
                             return (string)$objItem;
                         case QType::Integer:
+                        case QType::INTEGER:
                             try {
                                 return QType::Cast((string)$objItem, QType::Integer);
                             } catch (QCallerException $objExc) {
@@ -189,6 +211,7 @@ if(!class_exists(QType::class)) {
                                 throw $objExc;
                             }
                         case QType::Boolean:
+                        case QType::BOOLEAN:
                             $strItem = strtolower(trim((string)$objItem));
                             if (($strItem == 'false') ||
                                 (!$strItem)
@@ -247,6 +270,7 @@ if(!class_exists(QType::class)) {
 
             switch ($strPhpType) {
                 case QType::Object:
+                case QType::OBJECT:
                     try {
                         return QType::CastObjectTo($mixItem, $strType);
                     } catch (QCallerException $objExc) {
@@ -255,9 +279,13 @@ if(!class_exists(QType::class)) {
                     }
 
                 case QType::String:
+                case QType::STRING:
                 case QType::Integer:
+                case QType::INTEGER:
                 case QType::Float:
+                case QType::FLOAT:
                 case QType::Boolean:
+                case QType::BOOLEAN:
                     try {
                         return QType::CastValueTo($mixItem, $strType);
                     } catch (QCallerException $objExc) {
@@ -266,6 +294,7 @@ if(!class_exists(QType::class)) {
                     }
 
                 case QType::ArrayType:
+                case QType::ARRAY_TYPE:
                     try {
                         return QType::CastArrayTo($mixItem, $strType);
                     } catch (QCallerException $objExc) {
@@ -274,6 +303,7 @@ if(!class_exists(QType::class)) {
                     }
 
                 case QType::Resource:
+                case QType::RESOURCE:
                     // Cannot Cast Resources
                     throw new QInvalidCastException('Resources cannot be cast');
 
@@ -289,6 +319,7 @@ if(!class_exists(QType::class)) {
 
             switch (QType::TypeFromDoc($strNewType)) {
                 case QType::Boolean:
+                case QType::BOOLEAN:
                     if ($strOriginalType == QType::Boolean)
                         return $mixItem;
                     if (is_null($mixItem))
@@ -300,7 +331,15 @@ if(!class_exists(QType::class)) {
                     settype($mixItem, $strNewType);
                     return $mixItem;
 
+                case QType::DateTime:
+                    if(is_empty($mixItem)) {
+                        return null;
+                    } else {
+                        return $mixItem;
+                    }
+
                 case QType::Integer:
+                case QType::INTEGER:
                     if ($strOriginalType == QType::Boolean)
                         throw new QInvalidCastException(sprintf('Unable to cast %s value to %s: %s', $strOriginalType, $strNewType, $mixItem));
                     if (strlen($mixItem) == 0)
@@ -325,6 +364,7 @@ if(!class_exists(QType::class)) {
                     // any other scenarios is an invalid cast
                     throw new QInvalidCastException(sprintf('Unable to cast %s value to %s: %s', $strOriginalType, $strNewType, $mixItem));
                 case QType::Float:
+                case QType::FLOAT:
                     if ($strOriginalType == QType::Boolean)
                         throw new QInvalidCastException(sprintf('Unable to cast %s value to %s: %s', $strOriginalType, $strNewType, $mixItem));
                     if (strlen($mixItem) == 0)
@@ -356,6 +396,7 @@ if(!class_exists(QType::class)) {
                     return $mixItem;
 
                 case QType::String:
+                case QType::STRING:
                     if ($strOriginalType == QType::String)
                         return $mixItem;
 
@@ -441,54 +482,6 @@ if(!class_exists(QType::class)) {
             else
                 throw new QInvalidCastException(sprintf('Unable to cast Array to %s', $strType));
         }
-
-        /*
-          final public static function SoapArrayType($strType) {
-          try {
-          return sprintf('ArrayOf%s', ucfirst(QType::SoapType($strType)));
-          } catch (QInvalidCastException $objExc) {}
-          $objExc->IncrementOffset();
-          throw $objExc;
-          }
-          }
-
-          final public static function AlterSoapComplexTypeArray(&$strComplexTypeArray, $strType) {
-          switch ($strType) {
-          case QType::String:
-          $strItemName = 'string';
-          break;
-          case QType::Integer:
-          $strItemName = 'int';
-          break;
-          case QType::Float:
-          $strItemName = 'float';
-          break;
-          case QType::Boolean:
-          $strItemName = 'boolean';
-          break;
-          case QType::DateTime:
-          $strItemName = 'dateTime';
-          break;
-
-          case QType::ArrayType:
-          case QType::Object:
-          case QType::Resource:
-          default:
-          // Could not determine type
-          throw new QInvalidCastException(sprintf('Unable to determine type of item to lookup its constant: %s', $strType));
-          }
-
-          $strArrayName = QType::SoapArrayType($strType);
-
-          if (!array_key_exists($strArrayName, $strComplexTypeArray))
-          $strComplexTypeArray[$strArrayName] = sprintf(
-          '<s:complexType name="%s"><s:sequence>' .
-          '<s:element minOccurs="0" maxOccurs="unbounded" name="%s" type="%s"/>' .
-          '</s:sequence></s:complexType>',
-          QType::SoapArrayType($strType),
-          $strItemName,
-          QType::SoapType($strType));
-          } */
     }
 }
 
