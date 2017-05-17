@@ -95,52 +95,29 @@ class QDateTimeTextBox extends QTextBox
         // - hhhh:mm
         switch ($strInputFormat) {
             case "DD/MM/YYYY hhhh:mm:ss":
-                $intFormatType = 1;
+                $intFormatType = QDateTime::DateAndTimeType;
                 $strFormat = 'd/m/Y h:i:s';
                 break;
             case "DD/MM/YYYY hhhh:mm":
-                $intFormatType = 2;
+                $intFormatType = QDateTime::DateAndTimeType;
                 $strFormat = 'd/m/Y h:i';
                 break;
             case "DD/MM/YYYY":
-                $intFormatType = 3;
+                $intFormatType = QDateTime::DateOnlyType;
                 $strFormat = 'd/m/Y';
                 break;
             case "hhhh:mm:ss":
-                $intFormatType = 4;
+                $intFormatType = QDateTime::TimeOnlyType;
                 $strFormat = 'h:i:s';
                 break;
             case "hhhh:mm":
-                $intFormatType = 5;
+                $intFormatType = QDateTime::TimeOnlyType;
                 $strFormat = 'h:i';
                 break;
         }
 
-        $dttToReturn = new QDateTime($strText, null, false, $strFormat);
-        switch ($intFormatType) {
-            case 1:
-            case 2:
-                if ($dttToReturn->IsNull())
-                    return null;
-                else
-                    return $dttToReturn;
-                break;
-            case 3:
-                if ($dttToReturn->IsDateNull())
-                    return null;
-                else
-                    return $dttToReturn;
-                break;
-            case 4:
-            case 5:
-                if ($dttToReturn->IsTimeNull())
-                    return null;
-                else
-                    return $dttToReturn;
-                break;
-            default:
-                return null;
-        }
+        $dttToReturn = new QDateTime($strText, null, $intFormatType, $strFormat);
+        return $dttToReturn;
     }
 
     public function Validate()
