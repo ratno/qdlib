@@ -15,9 +15,7 @@ class QDLibServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__ . '/config/qdlib.php' => config_path('qdlib.php'),
-            __DIR__ . '/web/' => base_path('web'),
-            __DIR__ . '/qd_app/' => base_path('app/qd'),
+            __DIR__ . '/config/qdlib.php' => config_path('qdlib.php')
         ],"qdlib");
 
         if ($this->app->runningInConsole()) {
