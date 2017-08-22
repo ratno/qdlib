@@ -528,3 +528,7 @@ function prettyVarExport($var, array $opts = [])
             return var_export($var, true);
     }
 }
+
+function qdc(){
+    return new \QD\Lib\DbComment();
+}
