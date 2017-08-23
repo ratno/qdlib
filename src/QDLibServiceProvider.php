@@ -3,6 +3,7 @@
 namespace QD\Lib;
 
 use Illuminate\Support\ServiceProvider;
+use QD\Lib\Commands\Assign;
 use QD\Lib\Commands\Route;
 
 class QDLibServiceProvider extends ServiceProvider
@@ -21,6 +22,7 @@ class QDLibServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 Route::class,
+                Assign::class
             ]);
         } else {
             if(($user = user()) instanceof \Users) {

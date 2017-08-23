@@ -537,3 +537,127 @@ function uuid()
 {
     return \Ramsey\Uuid\Uuid::uuid4()->toString();
 }
+
+function assign_task()
+{
+    load_bootstrap();
+    echo "\n---------[Beginning Processing Task Assignment]---------\n";
+    $arrDefault = array(
+        "list" => array("link_type" => LinkType::_Protected, "link_visibility" => LinkVisibilityType::Show, "is_independent" => TRUE),
+        "new" => array("link_type" => LinkType::_Protected, "link_visibility" => LinkVisibilityType::Hidden, "is_independent" => TRUE),
+        "edit" => array("link_type" => LinkType::_Protected, "link_visibility" => LinkVisibilityType::Hidden, "is_independent" => FALSE),
+        "view" => array("link_type" => LinkType::_Protected, "link_visibility" => LinkVisibilityType::Hidden, "is_independent" => FALSE),
+        "delete" => array("link_type" => LinkType::_Protected, "link_visibility" => LinkVisibilityType::Hidden, "is_independent" => FALSE),
+        "export" => array("link_type" => LinkType::_Protected, "link_visibility" => LinkVisibilityType::Hidden, "is_independent" => TRUE),
+        "import" => array("link_type" => LinkType::_Protected, "link_visibility" => LinkVisibilityType::Hidden, "is_independent" => TRUE),
+        "api" => array("link_type" => LinkType::_Protected, "link_visibility" => LinkVisibilityType::Hidden, "is_independent" => TRUE),
+        "listedit" => array("link_type" => LinkType::_Protected, "link_visibility" => LinkVisibilityType::Hidden, "is_independent" => TRUE)
+    );
+
+    $arrAdminExcludeClassVisibility = array(
+        "activitylog",
+        "privatemessage",
+        "notification",
+        "task",
+        "role",
+        "menugroup",
+        "privatemessagecontent",
+        "setting",
+        "usertoken",
+        "applicationregistry",
+        "api",
+        "incomingapilog",
+        "outgoingapilog",
+        "appdomain",
+        "workflow",
+        "workflowstep",
+        "workflowhistory",
+    );
+
+    $arrAdminExcludeRoleAction = array("import", "export", "listedit");
+
+    $objRoles = Role::LoadAll();
+    // browse controller directory
+    $controller_dir = __BASEPATH__ . "/app/qd/controllers";
+    $d = dir($controller_dir);
+    while (false !== ($class_folder_name = $d->read())) {
+        if ($class_folder_name != '.' && $class_folder_name != '..' && !preg_match('/^\./', $class_folder_name)) {
+            $class_folder_dir = $controller_dir . "/" . $class_folder_name;
+            $s = dir($class_folder_dir);
+            while (false !== ($class_file_name = $s->read())) {
+                if ($class_file_name != '.' && $class_file_name != '..' && !preg_match("/^\./", $class_file_name)) {
+                    echo "Processing Task Assignment of $class_file_name\n";
+                    $token = substr($class_file_name, 0, strrpos($class_file_name, "."));
+                    $task = Task::LoadByToken($token);
+                    if (!$task) {
+                        $_action_name = substr($token, strlen(QConvertNotation::UnderscoreFromCamelCase($class_folder_name)) + 1);
+
+                        $task = new Task();
+                        $task->Token = $token;
+                        $task->ClassName = QConvertNotation::CamelCaseFromUnderscore($token);
+                        $task->ModelName = $class_folder_name;
+                        $task->TableName = QConvertNotation::UnderscoreFromCamelCase($class_folder_name);
+                        $task->ActionName = $_action_name;
+                        $task->Filename = $class_file_name;
+                        if ($task->ActionName == 'list' || $task->ActionName == 'listedit') {
+                            $title_prefix = "";
+                        } else {
+                            $title_prefix = ucwords(str_replace("_", " ", $task->ActionName));
+                        }
+                        if ($task->TableName == "home") {
+                            $title_suffix = "";
+                            $blnHome = true;
+                        } else {
+                            $title_suffix = ucwords(str_replace("_", " ", $task->TableName));
+                            $blnHome = false;
+                        }
+                        $title = trim(QApplication::Translate($title_prefix) . ' ' . QApplication::Translate($title_suffix));
+                        $task->Title = $title;
+                        $task->Link = strtolower(str_replace("_","-",$task->TableName)) . "/" . $task->ActionName;
+                        if ($blnHome) {
+                            if (in_array($task->ActionName, array("index", "login", "logout"))) {
+                                $task->LinkTypeId = LinkType::_Public;
+                            }
+                        } else {
+                            $task->LinkTypeId = (array_key_exists($task->ActionName, $arrDefault) && $arrDefault[$task->ActionName]['link_type']) ? $arrDefault[$task->ActionName]['link_type'] : LinkType::_Protected;
+                        }
+                        if (in_array(strtolower($task->ClassName), $arrAdminExcludeClassVisibility)) {
+                            $task->LinkVisibilityId = LinkVisibilityType::Hidden;
+                        } else {
+                            $task->LinkVisibilityId = (array_key_exists($task->ActionName, $arrDefault) && $arrDefault[$task->ActionName]['link_visibility']) ? $arrDefault[$task->ActionName]['link_visibility'] : LinkVisibilityType::Hidden;
+                        }
+                        $task->MenuGroupId = 1;
+                        $task->OrderNum = 0;
+                        $task->IsGlobalMenu = 0;
+                        if ($blnHome) {
+                            $task->IsIndependent = 1;
+                        } else {
+                            $task->IsIndependent = (array_key_exists($task->ActionName, $arrDefault) && $arrDefault[$task->ActionName]['is_independent']) ? $arrDefault[$task->ActionName]['is_independent'] : 0;
+                        }
+
+
+                        $task->Save(); //group root belum kepake
+
+                        foreach ($objRoles as $objRole) {
+                            if ($blnHome) {
+                                if($task->ActionName <> "login") {
+                                    $task->AssociateRole($objRole);
+                                }
+                            } else {
+                                if ($objRole->Id == 1) {
+                                    if (in_array(strtolower($task->ActionName), $arrAdminExcludeRoleAction)) {
+                                        // skip
+                                    } else {
+                                        $task->AssociateRole($objRole);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            $s->close();
+        }
+    }
+    $d->close();
+}
