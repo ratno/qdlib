@@ -532,3 +532,8 @@ function prettyVarExport($var, array $opts = [])
 function qdc(){
     return new \QD\Lib\DbComment();
 }
+
+function uuid()
+{
+    return \Ramsey\Uuid\Uuid::uuid4()->toString();
+}
