@@ -760,13 +760,13 @@ class QPage extends QBaseClass
     protected function SetReadNotification($intUserId, $strModel, $intModelId)
     {
         // ambil notifikasi terkait
-        $objs = Notification::QueryArray(
+        $objs = Notifications::QueryArray(
             QQ::AndCondition(
-                QQ::Equal(QQN::Notification()->UserId, $intUserId),
-                QQ::IsNull(QQN::Notification()->ReviewTs),
-                QQ::Equal(QQN::Notification()->Log->SubjectModel, $strModel),
-                QQ::Equal(QQN::Notification()->Log->SubjectIdNumber, $intModelId)
-            ), QQ::Expand(QQN::Notification()->Log)
+                QQ::Equal(QQN::Notifications()->UserId, $intUserId),
+                QQ::IsNull(QQN::Notifications()->ReviewTs),
+                QQ::Equal(QQN::Notifications()->Log->SubjectModel, $strModel),
+                QQ::Equal(QQN::Notifications()->Log->SubjectIdNumber, $intModelId)
+            ), QQ::Expand(QQN::Notifications()->Log)
         );
 
         // flag read notif

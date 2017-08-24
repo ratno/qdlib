@@ -557,7 +557,7 @@ function assign_task()
     $arrAdminExcludeClassVisibility = array(
         "activitylog",
         "privatemessage",
-        "notification",
+        "notifications",
         "task",
         "role",
         "menugroup",
@@ -565,7 +565,7 @@ function assign_task()
         "setting",
         "usertoken",
         "applicationregistry",
-        "api",
+        "apis",
         "incomingapilog",
         "outgoingapilog",
         "appdomain",
