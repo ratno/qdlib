@@ -474,6 +474,9 @@ function menu()
                 $strTopNavHtml .= "<ul class='nav nav-list'>\n";
                 if (is_array($topnav['child']))
                     foreach ($topnav['child'] as $subnav) {
+                        $__temp = explode("/",$subnav['link']);
+                        if(count($__temp)>1 and in_array($__temp[0],["activity-log","apis","app-domain","application-registry","incoming-api-log","menu-group","migrations","notifications","outgoing-api-log","role","task","user-token","workflow","workflow-history","workflow-step"])) continue;
+                        
                         $strSubnavImploded = preg_replace('/(\/.*)$/', "/list", strtolower(implode("/", array($classfoldername, $classtaskname))));
                         $currSubNav = '';
 
