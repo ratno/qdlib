@@ -115,6 +115,19 @@ function qd_url($controller, $action = "list", $params = null, $base = __WEB_URL
     }
 
     if ($controller) {
+        if(preg_match("/\-/",$controller)) {
+            // cek jika mengandung - ganti ke _
+            $controller = str_replace("-","_",$controller);
+        }
+        if(preg_match("/\_/",$controller)) {
+            // cek jika mengandung _ maka ubah dulu ke camelcase
+            $controller = \QCubed\QString::camelCaseFromUnderscore($controller);
+        }
+
+        // ubah ke underscore
+        $controller = \QCubed\QString::underscoreFromCamelCase($controller);
+
+        // kembalikan _ ke -
         $urls[] = str_replace("_", "-", $controller);
     }
 
