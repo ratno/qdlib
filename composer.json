@@ -32,5 +32,12 @@
         "flow/jsonpath": "^0.3.1",
         "rmccue/requests": "^1.7",
         "vlucas/phpdotenv": "^2.4"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "QD\\Lib\\QDLibServiceProvider"
+            ]
+        }
     }
 }
