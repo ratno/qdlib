@@ -34,6 +34,10 @@ function controller($strTableName, $strActionName, $strMethodName = null)
 
     include_once $filepath;
 
+    if(!is_null($strMethodName)) {
+        $strMethodName = "_" . str_replace("-","_",$strMethodName);
+    }
+
     if ($strMethodName && method_exists($class,$strMethodName)) {
         $instance = new $class;
         $instance->SetInformation($class); // load all information needed suchas User
