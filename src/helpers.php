@@ -141,12 +141,15 @@ function write_routes($objRole, $objTaskArray)
         foreach ($objTaskArray as $objTask) {
             $url = $objTask->Link;
 
-            if (!$objTask->IsIndependent) {
-                $url .= "/{hashid}";
-                $out .= 'Route::any("' . $url . '", function ($hashid) { return controller("' . $objTask->TableName . '","' . $objTask->ActionName . '"); });' . "\n";
-            } else {
-                $out .= 'Route::any("' . $url . '", function () { return controller("' . $objTask->TableName . '","' . $objTask->ActionName . '"); });' . "\n";
-            }
+//            if (!$objTask->IsIndependent) {
+//                $url .= "/{hashid}";
+//                $out .= 'Route::any("' . $url . '", function ($hashid) { return controller("' . $objTask->TableName . '","' . $objTask->ActionName . '"); });' . "\n";
+//            } else {
+//                $out .= 'Route::any("' . $url . '", function () { return controller("' . $objTask->TableName . '","' . $objTask->ActionName . '"); });' . "\n";
+//            }
+
+            $url .= "/{p1?}/{p2?}/{p3?}/{p4?}/{p5?}/{p6?}/{p7?}";
+            $out .= 'Route::any("' . $url . '", function ($p1=null,$p2=null,$p3=null,$p4=null,$p5=null,$p6=null,$p7=null) { return controller("' . $objTask->TableName . '","' . $objTask->ActionName . '"); });' . "\n";
         }
     }
 
