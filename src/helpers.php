@@ -34,7 +34,7 @@ function controller($strTableName, $strActionName, $strMethodName = null)
 
     include_once $filepath;
 
-    if ($strMethodName) {
+    if ($strMethodName && method_exists($class,$strMethodName)) {
         $instance = new $class;
         $instance->SetInformation($class); // load all information needed suchas User
         $instance->Page_Create(); // default page create
