@@ -314,7 +314,7 @@ function old_privileges($intRoleId = 0)
         $blnLoggedIn = TRUE;
         $cond_menugroup = QQ::AndCondition(
             QQ::OrCondition(QQ::Equal(QQN::MenuGroup()->Role->RoleId, $intRoleId)),
-            QQ::OrCondition(QQ::IsNull(QQN::MenuGroup()->ParentMenuId), QQ::Equal(QQN::MenuGroup()->ParentMenuId, 0))
+            QQ::OrCondition(QQ::IsNull(QQN::MenuGroup()->ParentId), QQ::Equal(QQN::MenuGroup()->ParentId, 0))
         );
         $cond_task = QQ::OrCondition(QQ::Equal(QQN::Task()->Role->RoleId, $intRoleId));
     } else {
@@ -329,7 +329,7 @@ function old_privileges($intRoleId = 0)
         foreach ($objMenuGroups as $objMenuGroup) {
             $arrMenuGroupAllowed[$objMenuGroup->Name] = $objMenuGroup->Name;
             // visible only when link or child available, but register all menu groups here
-            if (!is_empty($objMenuGroup->Link) or $objMenuGroup->CountMenuGroupsAsParentMenu()) {
+            if (!is_empty($objMenuGroup->Link) or $objMenuGroup->CountParentMenuGroupsAsHierarchy()) {
                 if ($blnLoggedIn) {
                     if (in_array(strtolower($objMenuGroup->Link), array("home/login"))) continue;
                 }
@@ -343,8 +343,8 @@ function old_privileges($intRoleId = 0)
                     "child" => null
                 );
 
-                if ($objMenuGroup->CountMenuGroupsAsParentMenu()) {
-                    $objChildMenuGroups = MenuGroup::LoadArrayByParentMenuId($objMenuGroup->Id, QQ::Clause(QQ::OrderBy(QQN::MenuGroup()->OrderNum)));
+                if ($objMenuGroup->CountParentMenuGroupsAsHierarchy()) {
+                    $objChildMenuGroups = MenuGroup::LoadArrayByParentId($objMenuGroup->Id, QQ::Clause(QQ::OrderBy(QQN::MenuGroup()->OrderNum)));
                     foreach ($objChildMenuGroups as $objChildMenuGroup) {
                         $link_group_map[strtolower($objChildMenuGroup->Link)] = $objMenuGroup->Name;
                         $link_group_map[str_replace("_", "", strtolower($objChildMenuGroup->Link))] = $objMenuGroup->Name;
